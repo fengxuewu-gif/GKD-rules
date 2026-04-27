@@ -1,0 +1,138 @@
+// Hosted GKD subscription for remote updates through GitHub Raw.
+{
+  id: 2026042701,
+  name: '本地自动打卡规则',
+  version: 5,
+  author: 'fengxuewu-gif',
+  updateUrl: 'https://raw.githubusercontent.com/fengxuewu-gif/GKD-rules/main/gkd.json5',
+  checkUpdateUrl: 'https://raw.githubusercontent.com/fengxuewu-gif/GKD-rules/main/gkd.json5',
+  supportUri: 'https://github.com/gkd-kit/gkd',
+  globalGroups: [],
+  apps: [
+    {
+      id: 'com.unionpay',
+      name: '云闪付',
+      groups: [
+        {
+          key: 0,
+          name: '首页-玩赚中心入口',
+          desc: '从首页右下角浮层进入玩赚中心，优先点击真实浮层节点，再用文案兜底。',
+          activityIds: ['com.unionpay.activity.UPActivityMain'],
+          matchRoot: true,
+          forcedTime: 6000,
+          priorityTime: 8000,
+          actionDelay: 200,
+          actionCd: 2000,
+          actionMaximum: 1,
+          resetMatch: 'app',
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              matches: '[id="com.unionpay:id/float_view"]',
+              snapshotUrls: ['local://unionpay-home-entry', 'local://unionpay-home-entry-activity'],
+            },
+            {
+              key: 1,
+              matches: '[desc="玩赚中心"]',
+              snapshotUrls: ['local://unionpay-home-entry', 'local://unionpay-home-entry-activity'],
+            },
+            {
+              key: 2,
+              matches: '[text="去抽奖"]',
+              snapshotUrls: ['local://unionpay-home-entry'],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'com.jingdong.app.mall',
+      name: '京东',
+      groups: [
+        {
+          key: 0,
+          name: '首页-秒杀领京豆入口',
+          desc: '第一步先从首页进入带有领京豆标识的秒杀入口。',
+          activityIds: ['com.jingdong.app.mall.MainFrameActivity'],
+          matchTime: 20000,
+          actionCd: 2500,
+          actionMaximum: 1,
+          resetMatch: 'app',
+          rules: [
+            {
+              key: 0,
+              matches: '[text="领京豆"]',
+              snapshotUrls: ['local://jd-home-jingdou-entry'],
+            },
+            {
+              key: 1,
+              matches: '[text="秒杀"]',
+              snapshotUrls: ['local://jd-home-jingdou-entry', 'local://jd-home-mainframe-activity'],
+            },
+          ],
+        },
+        {
+          key: 1,
+          name: '秒杀页-赚更多京豆',
+          desc: '第二步在京东秒杀页点击签到/赚更多京豆按钮，优先使用页面中的稳定 resource id。',
+          activityIds: ['com.jd.lib.ttt.page.TTTMultiPageActivity'],
+          actionCd: 2500,
+          actionMaximum: 1,
+          resetMatch: 'activity',
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              matches: '[id="homeSignButton"]',
+              snapshotUrls: ['local://jd-seckill-more-beans', 'local://jd-ttt-sign-button'],
+            },
+            {
+              key: 1,
+              matches: '[id="secKill_bean_sign_view"]',
+              snapshotUrls: ['local://jd-seckill-more-beans', 'local://jd-ttt-sign-button'],
+            },
+            {
+              key: 2,
+              matches: '[text="赚更多京豆"]',
+              snapshotUrls: ['local://jd-seckill-more-beans'],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'com.sgcc.wsgw.cn',
+      name: '网上国网',
+      groups: [
+        {
+          key: 0,
+          name: '首页-签到入口',
+          desc: '点击首页签到入口，优先命中 React 容器的 content-desc，再用文本兜底。',
+          activityIds: ['com.sgcc.wsgw.rnbundle.activity.HomeReactActivity'],
+          actionCd: 2000,
+          actionMaximum: 1,
+          resetMatch: 'app',
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              matches: '[desc="签到"]',
+              snapshotUrls: ['local://sgcc-home-signin', 'local://sgcc-home-react-activity'],
+            },
+            {
+              key: 1,
+              matches: '[text="签到"]',
+              snapshotUrls: ['local://sgcc-home-signin', 'local://sgcc-home-react-activity'],
+            },
+            {
+              key: 2,
+              matches: '[id="com.sgcc.wsgw.cn:id/sin_tag"]',
+              snapshotUrls: ['local://sgcc-home-signin'],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}
