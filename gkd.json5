@@ -2,7 +2,7 @@
 {
   id: 2026042701,
   name: '本地自动打卡规则',
-  version: 7,
+  version: 8,
   author: 'fengxuewu-gif',
   updateUrl: 'https://raw.githubusercontent.com/fengxuewu-gif/GKD-rules/main/gkd.json5',
   checkUpdateUrl: 'https://raw.githubusercontent.com/fengxuewu-gif/GKD-rules/main/gkd.json5',
@@ -49,9 +49,12 @@
       groups: [
         {
           key: 0,
-          name: '首页-秒杀领京豆入口',
-          desc: '第一步先从首页进入带有领京豆标识的秒杀入口。',
-          activityIds: ['com.jingdong.app.mall.MainFrameActivity'],
+          name: '首页到秒杀页-领京豆两步链路',
+          desc: '按两步流程执行：先点首页领京豆/秒杀入口，再点秒杀页赚更多京豆；每步只触发一次。',
+          activityIds: [
+            'com.jingdong.app.mall.MainFrameActivity',
+            'com.jd.lib.ttt.page.TTTMultiPageActivity',
+          ],
           matchTime: 20000,
           actionCd: 2500,
           actionMaximum: 1,
@@ -59,39 +62,26 @@
           rules: [
             {
               key: 0,
-              matches: '[text="领京豆"]',
-              snapshotUrls: ['local://jd-home-jingdou-entry'],
+              name: '点击首页入口',
+              matches: [
+                '[text="领京豆"]',
+                '[text="秒杀"]',
+              ],
+              snapshotUrls: [
+                'local://jd-home-jingdou-entry',
+                'local://jd-home-mainframe-activity',
+              ],
             },
             {
               key: 1,
-              matches: '[text="秒杀"]',
-              snapshotUrls: ['local://jd-home-jingdou-entry', 'local://jd-home-mainframe-activity'],
-            },
-          ],
-        },
-        {
-          key: 1,
-          name: '秒杀页-赚更多京豆',
-          desc: '第二步在京东秒杀页点击签到/赚更多京豆按钮，优先使用页面中的稳定 resource id。',
-          activityIds: ['com.jd.lib.ttt.page.TTTMultiPageActivity'],
-          actionCd: 2500,
-          actionMaximum: 1,
-          resetMatch: 'activity',
-          rules: [
-            {
-              key: 0,
+              name: '点击赚更多京豆',
+              preKeys: [0],
               fastQuery: true,
-              matches: '[id="homeSignButton"]',
-              snapshotUrls: ['local://jd-seckill-more-beans', 'local://jd-ttt-sign-button'],
-            },
-            {
-              key: 1,
-              matches: '[id="secKill_bean_sign_view"]',
-              snapshotUrls: ['local://jd-seckill-more-beans', 'local://jd-ttt-sign-button'],
-            },
-            {
-              key: 2,
-              matches: '[text="赚更多京豆"]',
+              matches: [
+                '[id="homeSignButton"]',
+                '[id="secKill_bean_sign_view"]',
+                '[text="赚更多京豆"]',
+              ],
               snapshotUrls: ['local://jd-seckill-more-beans'],
             },
           ],
@@ -105,7 +95,7 @@
         {
           key: 0,
           name: '首页-签到入口',
-          desc: '点击首页签到入口，优先命中 React 容器的 content-desc，再用文本兜底。',
+          desc: '115风格：签到入口同轮仅触发一次，避免同页重复点击。',
           activityIds: ['com.sgcc.wsgw.rnbundle.activity.HomeReactActivity'],
           actionCd: 2000,
           actionMaximum: 1,
@@ -113,18 +103,13 @@
           rules: [
             {
               key: 0,
+              name: '点击签到',
               fastQuery: true,
-              matches: '[desc="签到"]',
-              snapshotUrls: ['local://sgcc-home-signin', 'local://sgcc-home-react-activity'],
-            },
-            {
-              key: 1,
-              matches: '[text="签到"]',
-              snapshotUrls: ['local://sgcc-home-signin', 'local://sgcc-home-react-activity'],
-            },
-            {
-              key: 2,
-              matches: '[id="com.sgcc.wsgw.cn:id/sin_tag"]',
+              matches: [
+                '[desc="签到"]',
+                '[text="签到"]',
+                '[id="com.sgcc.wsgw.cn:id/sin_tag"]',
+              ],
               snapshotUrls: ['local://sgcc-home-signin'],
             },
           ],
