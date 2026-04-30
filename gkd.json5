@@ -2,7 +2,7 @@
 {
   id: 2026042701,
   name: '本地自动打卡规则',
-  version: 6,
+  version: 7,
   author: 'fengxuewu-gif',
   updateUrl: 'https://raw.githubusercontent.com/fengxuewu-gif/GKD-rules/main/gkd.json5',
   checkUpdateUrl: 'https://raw.githubusercontent.com/fengxuewu-gif/GKD-rules/main/gkd.json5',
@@ -16,7 +16,7 @@
         {
           key: 0,
           name: '首页-玩赚中心入口',
-          desc: '优先点击首页中部玩赚中心横幅，其次再回退到右下角浮层入口。',
+          desc: '优先点击首页中部玩赚中心横幅，同轮仅触发一次，避免重复点击影响使用。',
           activityIds: ['com.unionpay.activity.UPActivityMain'],
           matchRoot: true,
           actionCd: 2000,
@@ -25,34 +25,19 @@
           rules: [
             {
               key: 0,
-              matches: '@[clickable=true] > [text="玩赚中心"] + [text="去抽奖"]',
-              snapshotUrls: ['local://unionpay-home-banner-entry'],
-            },
-            {
-              key: 1,
-              matches: '@[clickable=true] > [text="玩赚中心"]',
-              snapshotUrls: ['local://unionpay-home-banner-entry'],
-            },
-            {
-              key: 2,
-              matches: '@[clickable=true] > [text="去抽奖"]',
-              snapshotUrls: ['local://unionpay-home-banner-entry'],
-            },
-            {
-              key: 3,
-              fastQuery: true,
-              matches: '[id="com.unionpay:id/float_view"]',
-              snapshotUrls: ['local://unionpay-home-entry', 'local://unionpay-home-entry-activity'],
-            },
-            {
-              key: 4,
-              matches: '[desc="玩赚中心"]',
-              snapshotUrls: ['local://unionpay-home-entry', 'local://unionpay-home-entry-activity'],
-            },
-            {
-              key: 5,
-              matches: '[text="抽大奖"]',
-              snapshotUrls: ['local://unionpay-home-entry'],
+              matches: [
+                '@[clickable=true] > [text="玩赚中心"] + [text="去抽奖"]',
+                '@[clickable=true] > [text="玩赚中心"]',
+                '@[clickable=true] > [text="去抽奖"]',
+                '[id="com.unionpay:id/float_view"]',
+                '[desc="玩赚中心"]',
+                '[text="抽大奖"]',
+              ],
+              snapshotUrls: [
+                'local://unionpay-home-banner-entry',
+                'local://unionpay-home-entry',
+                'local://unionpay-home-entry-activity',
+              ],
             },
           ],
         },
